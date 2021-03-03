@@ -1,32 +1,71 @@
-import React, { useState } from "react";
-import { BeerCard, Name,Description } from "./style";
+import React, { useContext, useState } from "react";
+import { BeerCard, Name, Description } from "./style";
 import { FlexEnd, SpaceBetween } from "../CommonComponents/index";
-import { StarOutlined, StarFilled } from "@ant-design/icons";
+import {
+  StarOutlined,
+  StarFilled,
+  EditFilled,
+  DeleteFilled,
+} from "@ant-design/icons";
+import { FavouritesContext } from "../../App";
 
-const Beer = ({name, description,image, addToFav}) => {
-  const [favourite, setFavourite] = useState(false);
-    
+
+const Beer = ({
+  name,
+  description,
+  image,
+  beerData,
+  index,
+  onDelete,
+  type,
+  showModal
+}) => {
+  const { favourites, onFavouriteChange } = useContext(FavouritesContext);
+
+  
+  const isFavourite = () => {
+    let result = favourites.filter(function (item) {
+      return item["id"] === beerData["id"];
+    });
+    if (result.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
 
   return (
     <BeerCard>
       <FlexEnd>
-        {favourite ? (
-          <StarFilled onClick={() => addToFav(name)} />
+        {type === "home" ? <EditFilled style={{ marginRight: "5px" }} onClick={()=>showModal(index)}/> : ""}
+        {type === "home" ? (
+          <DeleteFilled
+            style={{ marginRight: "5px" }}
+            onClick={() => onDelete(index)}
+          />
         ) : (
-          <StarOutlined onClick={() => addToFav(name)} />
+          ""
+        )}
+
+        {isFavourite() ? (
+          <StarFilled onClick={() => onFavouriteChange(beerData)} />
+        ) : (
+          <StarOutlined onClick={() => onFavouriteChange(beerData)} />
         )}
       </FlexEnd>
       <SpaceBetween>
         <img
           src={image}
           alt="beer"
-          style={{ maxHeight: "100px",marginRight:"10px"}}
+          style={{ maxHeight: "100px", marginRight: "10px" }}
         />
         <div>
-         <Name>{name}</Name>
-         <Description>{description}</Description>
+          <Name>{name}</Name>
+          <Description>{description}</Description>
         </div>
       </SpaceBetween>
+  
     </BeerCard>
   );
 };
