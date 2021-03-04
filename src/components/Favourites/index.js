@@ -8,13 +8,17 @@ const Favourites = () => {
 
   return (
     <div style={{ margin: "20px 0px" }}>
-     {favourites && favourites.length > 0 ? (<h1 style={{textAlign:"center"}}> My Favourite Brewski</h1>) :  (<h1 style={{textAlign:"center"}}>You don't have any Favourite Brewski</h1>)}
+      {favourites && favourites.length > 0 ? (
+        <h1 style={{ textAlign: "center" }}> My Favourite Brewski</h1>
+      ) : (
+        <h1 style={{ textAlign: "center" }}>
+          You don't have any Favourite Brewski
+        </h1>
+      )}
       <Row gutter={[16, 16]} justify="center">
         {favourites &&
           favourites.map((beer) => (
-            <Col
-              xs={24} md={12} xl={7} lg={7} 
-            >
+            <Col xs={24} md={12} xl={7} lg={7}>
               <Beer
                 name={beer.name}
                 description={beer.description}

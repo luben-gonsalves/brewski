@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Col, Input, Row, Space, Form } from "antd";
+import { Col, Input, Row } from "antd";
 import Beer from "../Beer/index";
 import Modal from "antd/lib/modal/Modal";
 import TextArea from "antd/lib/input/TextArea";
 import InfiniteScroll from "react-infinite-scroll-component";
+
 const Home = () => {
   const { Search } = Input;
   const [pageNumber, setPageNumber] = useState(1);
@@ -67,13 +68,13 @@ const Home = () => {
   const onChange = (e) => {
     updateBeer({ ...beer, [e.target.name]: e.target.value });
   };
-  
+
   return (
     <>
       <Row justify="center">
         <Col lg={{ span: 12 }} style={{ marginTop: "20px" }}>
           <Search
-            placeholder="input search text"
+            placeholder="Search for beer..."
             allowClear
             size="large"
             enterButton
@@ -132,7 +133,6 @@ const Home = () => {
               defaultValue={beer.description}
               onChange={onChange}
               style={{marginTop:"5px"}}
-
             />
       </Modal>
     </>

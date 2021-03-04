@@ -1,14 +1,10 @@
-import "./App.css";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-  Link,
-} from "react-router-dom";
-import { Layout, Menu, Breadcrumb, Input } from "antd";
-import Home from "./components/Home";
 import React, { useState } from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+
+import { Layout, Menu, message } from "antd";
+import "./App.css";
+
+import Home from "./components/Home";
 import Favourites from "./components/Favourites";
 
 export const FavouritesContext = React.createContext();
@@ -19,21 +15,27 @@ function App() {
 
   const onFavouriteChange = (beerData) => {
     let tempFav = favourites.slice();
-    for(let i = 0; i < tempFav.length; i++) {
-      if(tempFav[i].id === beerData.id) {
-        tempFav.splice(i,1);
-        setFavourites(tempFav);  
+    for (let i = 0; i < tempFav.length; i++) {
+      if (tempFav[i].id === beerData.id) {
+        tempFav.splice(i, 1);
+        setFavourites(tempFav);
         return;
       }
-    }  
-    setFavourites([...favourites,beerData]);      
-  }
+    }
+    message.success(`${beerData.name} added to favourites`);
+    setFavourites([...favourites, beerData]);
+  };
 
   return (
     <Router>
       <Layout className="layout">
         <Header style={{ padding: 0 }}>
-          <a href="/" style={{ color: "white", fontSize: "26px",marginLeft:"10px", }}>Brewski</a>
+          <a
+            href="/"
+            style={{ color: "white", fontSize: "26px", marginLeft: "10px" }}
+          >
+            Brewski
+          </a>
 
           <Menu
             theme="dark"
@@ -51,7 +53,7 @@ function App() {
         </Header>
       </Layout>
 
-      <FavouritesContext.Provider value={{favourites,onFavouriteChange}} >
+      <FavouritesContext.Provider value={{ favourites, onFavouriteChange }}>
         <Switch>
           <Route exact path="/" component={Home} />
         </Switch>

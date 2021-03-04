@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { BeerCard, Name, Description } from "./style";
 import { FlexEnd, SpaceBetween } from "../CommonComponents/index";
 import {
@@ -33,7 +33,7 @@ const Beer = ({
   };
 
   function confirm(e) {
-    onDelete(index)
+    onDelete(index);
     message.success("Beer deleted successfully");
   }
 
@@ -60,30 +60,33 @@ const Beer = ({
         ) : (
           ""
         )}
-        {type === "home"
-          ? (
-                <Popconfirm
-                  title="Are you sure to delete this Beer?"
-                  onConfirm={confirm}
-                  onCancel={cancel}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                <DeleteOutlined
-                style={{ marginLeft: "10px", color: "#c71020" }}
-              />
-                </Popconfirm>
-              )
-    
-          : ""}
+        {type === "home" ? (
+          <Popconfirm
+            title="Are you sure to delete this Beer?"
+            onConfirm={confirm}
+            onCancel={cancel}
+            okText="Yes"
+            cancelText="No"
+          >
+            <DeleteOutlined style={{ marginLeft: "10px", color: "#c71020" }} />
+          </Popconfirm>
+        ) : (
+          ""
+        )}
       </FlexEnd>
       <SpaceBetween>
         <img
           src={image}
           alt="beer"
-          style={{ maxHeight: "100px",maxWidth:"50px", marginRight: "10px",alignSelf:"flex-start",marginTop:"20px"}}
+          style={{
+            maxHeight: "100px",
+            maxWidth: "50px",
+            marginRight: "10px",
+            alignSelf: "flex-start",
+            marginTop: "20px",
+          }}
         />
-        <div style={{marginTop:"10px"}}>
+        <div style={{ marginTop: "10px" }}>
           <Name>{name}</Name>
           <Description>{description}</Description>
         </div>
