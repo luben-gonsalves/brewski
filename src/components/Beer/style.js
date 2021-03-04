@@ -3,6 +3,8 @@ import { Card } from "antd"
 
 export const BeerCard = styled(Card)`
 background-color:#edf0f9;
+height:100%;
+border-radius:12px;
 `
 
 export const Name = styled.p`

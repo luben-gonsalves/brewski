@@ -4,12 +4,11 @@ import { FlexEnd, SpaceBetween } from "../CommonComponents/index";
 import {
   StarOutlined,
   StarFilled,
-  EditFilled,
-  DeleteFilled,
+  EditOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import { FavouritesContext } from "../../App";
-
-
+import { Popconfirm, message } from "antd";
 const Beer = ({
   name,
   description,
@@ -18,11 +17,10 @@ const Beer = ({
   index,
   onDelete,
   type,
-  showModal
+  showModal,
 }) => {
   const { favourites, onFavouriteChange } = useContext(FavouritesContext);
 
-  
   const isFavourite = () => {
     let result = favourites.filter(function (item) {
       return item["id"] === beerData["id"];
@@ -34,38 +32,62 @@ const Beer = ({
     }
   };
 
+  function confirm(e) {
+    onDelete(index)
+    message.success("Beer deleted successfully");
+  }
+
+  function cancel(e) {
+    console.log(e);
+  }
 
   return (
     <BeerCard>
       <FlexEnd>
-        {type === "home" ? <EditFilled style={{ marginRight: "5px" }} onClick={()=>showModal(index)}/> : ""}
+        {isFavourite() ? (
+          <StarFilled
+            onClick={() => onFavouriteChange(beerData)}
+            style={{ color: "#efc050" }}
+          />
+        ) : (
+          <StarOutlined onClick={() => onFavouriteChange(beerData)} />
+        )}
         {type === "home" ? (
-          <DeleteFilled
-            style={{ marginRight: "5px" }}
-            onClick={() => onDelete(index)}
+          <EditOutlined
+            style={{ marginLeft: "10px" }}
+            onClick={() => showModal(index)}
           />
         ) : (
           ""
         )}
-
-        {isFavourite() ? (
-          <StarFilled onClick={() => onFavouriteChange(beerData)} />
-        ) : (
-          <StarOutlined onClick={() => onFavouriteChange(beerData)} />
-        )}
+        {type === "home"
+          ? (
+                <Popconfirm
+                  title="Are you sure to delete this Beer?"
+                  onConfirm={confirm}
+                  onCancel={cancel}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                <DeleteOutlined
+                style={{ marginLeft: "10px", color: "#c71020" }}
+              />
+                </Popconfirm>
+              )
+    
+          : ""}
       </FlexEnd>
       <SpaceBetween>
         <img
           src={image}
           alt="beer"
-          style={{ maxHeight: "100px", marginRight: "10px" }}
+          style={{ maxHeight: "100px",maxWidth:"50px", marginRight: "10px",alignSelf:"flex-start",marginTop:"20px"}}
         />
-        <div>
+        <div style={{marginTop:"10px"}}>
           <Name>{name}</Name>
           <Description>{description}</Description>
         </div>
       </SpaceBetween>
-  
     </BeerCard>
   );
 };

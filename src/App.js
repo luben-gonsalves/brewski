@@ -33,7 +33,7 @@ function App() {
     <Router>
       <Layout className="layout">
         <Header style={{ padding: 0 }}>
-          <span style={{ color: "white", fontSize: "24px" }}>Brewski</span>
+          <a href="/" style={{ color: "white", fontSize: "26px",marginLeft:"10px", }}>Brewski</a>
 
           <Menu
             theme="dark"

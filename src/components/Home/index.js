@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Col, Input, Pagination, Row, Space } from "antd";
+import { Col, Input, Row, Space, Form } from "antd";
 import Beer from "../Beer/index";
-import { FlexBox } from "../CommonComponents";
 import Modal from "antd/lib/modal/Modal";
 import TextArea from "antd/lib/input/TextArea";
 import InfiniteScroll from "react-infinite-scroll-component";
-
 const Home = () => {
   const { Search } = Input;
   const [pageNumber, setPageNumber] = useState(1);
   const [beers, setBeers] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [beer, updateBeer] = useState({ name: "", description: "" });
+  const [beer, updateBeer] = useState({ name: "", description: ""});
+
   const onSearch = (value) => {
     if (!value) {
-      console.log("e");
-      setBeers([]);
+      setBeers([])
+      fetchBeers(1);
       return;
     }
     const apiUrl = `https://api.punkapi.com/v2/beers?beer_name=${value}`;
@@ -27,29 +26,32 @@ const Home = () => {
   };
 
   const onDelete = (index) => {
-    let dummyBeer = beers.slice();
-    dummyBeer.splice(index, 1);
-    setBeers(dummyBeer);
+    let beer = beers.slice();
+    beer.splice(index, 1);
+    setBeers(beer);
   };
 
-  useEffect(() => {
-    const apiUrl = `https://api.punkapi.com/v2/beers?page=${pageNumber}&per_page=5`;
+  const fetchBeers =(page) => {
+    const apiUrl = `https://api.punkapi.com/v2/beers?page=${page}&per_page=50`;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
-        setBeers([...beers, ...data]);
+        setBeers((prevState) => [...prevState,...data]);
       });
+  }
+
+  useEffect(() => {
+      fetchBeers(pageNumber)
   }, [pageNumber]);
 
   const showModal = (index) => {
-    let beer = beers[index];
-    updateBeer(beer);
+    updateBeer(beers[index]);
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
-    let dummyBeers = beers;
-    for (let b of dummyBeers) {
+    let tempBeers = beers;
+    for (let b of tempBeers) {
       if (b.id === beer.id) {
         b.name = beer.name;
         b.description = beer.description;
@@ -65,16 +67,16 @@ const Home = () => {
   const onChange = (e) => {
     updateBeer({ ...beer, [e.target.name]: e.target.value });
   };
-
+  
   return (
-    <Space direction="vertical">
-      <Row>
-        <Col lg={{ span: 12, offset: 6 }} sm={24} style={{ marginTop: "20px" }}>
+    <>
+      <Row justify="center">
+        <Col lg={{ span: 12 }} style={{ marginTop: "20px" }}>
           <Search
             placeholder="input search text"
             allowClear
-            enterButton="Search"
             size="large"
+            enterButton
             onSearch={onSearch}
           />
         </Col>
@@ -84,18 +86,12 @@ const Home = () => {
         dataLength={beers.length}
         next={() => setPageNumber(pageNumber + 1)}
         hasMore={true}
+        style={{ overflowX: "hidden", marginTop: "20px" }}
       >
-        <Row gutter={[16, 16]}>
+        <Row gutter={[16, 16]} justify="center">
           {beers &&
             beers.map((beer, index) => (
-              <Col
-                lg={8}
-                style={{
-                  borderRadius: "12px",
-                  backgroundColor: "#edf0f9",
-                  margin: "0px 0px",
-                }}
-              >
+              <Col xs={24} md={12} xl={7} lg={7}>
                 <Beer
                   name={beer.name}
                   description={beer.description}
@@ -116,26 +112,30 @@ const Home = () => {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-      >
-        <Input
-          placeholder="Basic usage"
-          value={beer.name}
-          defaultValue={beer.name}
-          name="name"
-          addonAfter="Title"
-          type="text"
-          onChange={onChange}
-        />
-        <TextArea
-          placeholder="Autosize height based on content lines"
-          name="description"
-          autoSize
-          value={beer.description}
-          defaultValue={beer.description}
-          onChange={onChange}
-        />
+      > 
+         <label htmlFor="name">Name :</label>
+         <Input
+              placeholder="Basic usage"
+              type="text"
+              name="name"
+              value={beer.name}
+              defaultValue={beer.name}
+              onChange={onChange}
+              style={{marginTop:"5px",marginBottom:"10px"}}
+            />  
+        <label htmlFor="description" style={{marginTop:"10px"}}>Description :</label>
+            <TextArea
+              placeholder="Enter beer description"
+              name="description"
+              autoSize ={{minRows: "5"}}
+              value={beer.description}
+              defaultValue={beer.description}
+              onChange={onChange}
+              style={{marginTop:"5px"}}
+
+            />
       </Modal>
-    </Space>
+    </>
   );
 };
 

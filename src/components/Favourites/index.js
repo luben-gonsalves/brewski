@@ -7,12 +7,13 @@ const Favourites = () => {
   const { favourites } = useContext(FavouritesContext);
 
   return (
-      <Row gutter={[16, 16]}>
+    <div style={{ margin: "20px 0px" }}>
+     {favourites && favourites.length > 0 ? (<h1 style={{textAlign:"center"}}> My Favourite Brewski</h1>) :  (<h1 style={{textAlign:"center"}}>You don't have any Favourite Brewski</h1>)}
+      <Row gutter={[16, 16]} justify="center">
         {favourites &&
           favourites.map((beer) => (
             <Col
-              lg={8}
-              style={{ borderRadius: "12px", backgroundColor: "#edf0f9" }}
+              xs={24} md={12} xl={7} lg={7} 
             >
               <Beer
                 name={beer.name}
@@ -24,6 +25,7 @@ const Favourites = () => {
             </Col>
           ))}
       </Row>
+    </div>
   );
 };
 
